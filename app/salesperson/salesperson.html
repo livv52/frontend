@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-2" >
+                <h2>Sales Persons
+                        <button type="button" class="btn btn-success pull-right" ng-click="addclicked()"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</button>
+                </h2>
+                
+                <ul class="list-group">
+
+                    <a href="#" ng-class="{'active': item.SPId == selected}" class="list-group-item" ng-repeat="item in salesperson" ng-click="setSelected(item.SPId);setSelectedSp(item); $event.stopPropagation(); $event.preventDefault();">
+                        {{item.Firstname}}
+                        {{item.Lastname}}
+                        <span ng-class="item.Position == 'Primary' ? 'primarysp' : 'secondarysp'">
+                                {{item.Position}}
+                        </span>
+                    </a>
+                </ul>
+            </div>
+            <div class="col-md-3 col-md-offset-1" ng-if = "isSelectedSp">
+            <h2>Details
+                <div class="pull-right">
+                    <button type="button" class="btn btn-primary" ng-click="updateSalesperson(selectedsp)"> 
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true" >
+                            </span>
+                             Edit
+                            </button>
+                    
+                    <button type="button" class="btn btn-danger"ng-click="deleteSalesperson(selectedsp)"> 
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true">
+                            </span> 
+                            Delete
+                        </button>
+                </div>
+            </h2>
+            <div class="well">
+               
+                Firstname: {{selectedsp.Firstname}}
+                <br>
+                <br>
+                Lastname: {{selectedsp.Lastname}}
+                <br>
+                <!-- Position: {{}} -->
+                <br>
+                <hr style="border-top: 1px solid black; background: transparent;">
+                {{selectedsp.Description}}
+            </div>
+        </div>
+
+        <div class="col-md-3 col-md-offset-1" ng-if = "isAddClicked || isUpdate">
+            <h2>Add new sales person</h2>
+        <form name="Salesperson" novalidate> 
+            <div class="form-group">
+                
+                
+                <label>First Name: </label>
+                <input type="text" name="firstname" class="form-control" ng-model="addsp.Firstname" required>
+               
+            </div>
+            <div class="form-group">
+                    <label>Last Name: </label>
+                    <input type="text" name="lastname" class="form-control" ng-model="addsp.Lastname" required>
+                </div>
+                <div class="form-group">
+                        <label>Description: </label>
+                        <input type="text" name="description" class="form-control" ng-model="addsp.Description" >
+                    </div>
+                    <!-- <div class="form-group">
+
+                            <label for="singleSelect"> Position: </label><br>
+                            <select class ="form-control" name="singleSelect" ng-model="addsp.Position" required>
+                              <option value="Primary">Primary</option>
+                              <option value="Secondary">Secondary</option>
+                            </select>
+                        </div>
+     -->
+            <!-- SUBMIT BUTTON -->
+            <button type="submit" class="btn btn-primary" ng-click="onSubmit(Salesperson.$valid)" >Submit</button>
+        </form>
+        </div>
+        </div>
+    </div> 
+    
+</body>
+
+</html>
