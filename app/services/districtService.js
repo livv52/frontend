@@ -29,4 +29,29 @@ angular.module('myApp.districtService', [])
 
     };
 
+    this.delete = function (district){
+        var req = {
+            method: 'DELETE',
+            url: 'http://localhost:53712/district/delete/' + district.DistrictId,
+            data: district
+           }
+           
+          return $http(req);
+
+    };
+    this.update = function (district){
+        var req = {
+            method: 'PUT',
+            url: 'http://localhost:53712/district/update',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            data: district
+           }
+           
+          return $http(req);
+
+    };
+
+
 }]);

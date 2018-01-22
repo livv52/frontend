@@ -11,7 +11,7 @@ angular.module('myApp.store', ['ngRoute'])
 
     .controller('storeCtrl', ['$scope', 'storeService','districtService', function ($scope, storeService, districtService) {
 
-         $scope.addst = { };
+        $scope.addst = { };
         storeService.list().success(function (data) {
             $scope.store = data;
         });
@@ -51,6 +51,9 @@ angular.module('myApp.store', ['ngRoute'])
             if ($scope.isAddClicked == true){
                 console.log($scope.addst)
                 storeService.insert($scope.addst).then(function () {
+                    $scope.isSelectedSt = false;
+                    $scope.isUpdate = false;
+                    $scope.isAddClicked = false;
                     storeService.list().success(function (data) {
                         $scope.store = data;
                     });
@@ -59,6 +62,9 @@ angular.module('myApp.store', ['ngRoute'])
             else
             {
                 storeService.update($scope.addst).then(function () {
+                    $scope.isSelectedSt = true;
+                    $scope.isUpdate = false;
+                    $scope.isAddClicked = false;
                     storeService.list().success(function (data) {
                         $scope.store = data;
                     });

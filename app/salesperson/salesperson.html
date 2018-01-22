@@ -10,12 +10,10 @@
                 
                 <ul class="list-group">
 
-                    <a href="#" ng-class="{'active': item.SPId == selected}" class="list-group-item" ng-repeat="item in salesperson" ng-click="setSelected(item.SPId);setSelectedSp(item); $event.stopPropagation(); $event.preventDefault();">
+                    <a href="#" ng-class="{'active': item.SPId == selected}" class="list-group-item" ng-repeat="item in salesperson" ng-click="setSelected(item.SPId);setSelectedSp(item);$event.stopPropagation(); $event.preventDefault();">
                         {{item.Firstname}}
                         {{item.Lastname}}
-                        <span ng-class="item.Position == 'Primary' ? 'primarysp' : 'secondarysp'">
-                                {{item.Position}}
-                        </span>
+                       
                     </a>
                 </ul>
             </div>
@@ -28,7 +26,7 @@
                              Edit
                             </button>
                     
-                    <button type="button" class="btn btn-danger"ng-click="deleteSalesperson(selectedsp)"> 
+                    <button type="button" class="btn btn-danger" ng-disabled="districts.length > 0" ng-click="deleteSalesperson(selectedsp)"> 
                         <span class="glyphicon glyphicon-trash" aria-hidden="true">
                             </span> 
                             Delete
@@ -42,8 +40,10 @@
                 <br>
                 Lastname: {{selectedsp.Lastname}}
                 <br>
-                <!-- Position: {{}} -->
                 <br>
+                <span ng-repeat="d in districts" >
+                    District: {{d.DistrictName}} <span ng-class="d.Position == 'Primary' ? 'primarysp' : 'secondarysp'"> {{d.Position}} </span><br>
+                </span>
                 <hr style="border-top: 1px solid black; background: transparent;">
                 {{selectedsp.Description}}
             </div>
@@ -51,7 +51,7 @@
 
         <div class="col-md-3 col-md-offset-1" ng-if = "isAddClicked || isUpdate">
             <h2>Add new sales person</h2>
-        <form name="Salesperson" novalidate> 
+        <form name="Salesperson" ng-submit="onSubmit(Salesperson.$valid)"> 
             <div class="form-group">
                 
                 
@@ -77,7 +77,7 @@
                         </div>
      -->
             <!-- SUBMIT BUTTON -->
-            <button type="submit" class="btn btn-primary" ng-click="onSubmit(Salesperson.$valid)" >Submit</button>
+            <input value="Submit" type="submit" class="btn btn-primary" ></input>
         </form>
         </div>
         </div>

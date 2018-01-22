@@ -48,5 +48,9 @@ angular.module('myApp.salespersonService', [])
         
     }
 
+    this.getDistricts = function(id){
+        return $http.get('http://localhost:53712/salesperson/districts/'+ id);
+    }
+
 
 }]);

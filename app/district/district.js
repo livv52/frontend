@@ -14,6 +14,8 @@ angular.module('myApp.district', ['ngRoute'])
          $scope.adddt = { };
          $scope.adddt.SalesPersons = [{"SPId":"" ,"Position":""}];
          $scope.multiplePrimaries = false;
+         $scope.sameDistrictName = false;
+         $scope.salespersons = [];
         
          salespersonService.list().success(function (data) {
             $scope.salesperson = data;
@@ -28,23 +30,23 @@ angular.module('myApp.district', ['ngRoute'])
             $scope.selected = index;
             console.log($scope.selected);
 
+            districtService.getSalesPerson( $scope.selected).success(function(data){
+                $scope.salespersons = data;
+                console.log($scope.salespersons);
+              }); 
+
         }
 
         $scope.setSelectedDt = function (item) {
 
             $scope.selecteddt = item;
-            $scope.isUpdate = false;            
-            $scope.isAddClicked = false;
-            $scope.isSelectedDt = true;
-            console.log($scope.selecteddt);
+            $scope.changeView(false,true,false);
+           
 
         }
 
         $scope.addclicked = function () {
-
-            $scope.isUpdate = false;
-            $scope.isSelectedDt = false;
-            $scope.isAddClicked = true;
+            $scope.changeView(true,false,false);
             $scope.selected = 0 ;
 
         }
@@ -53,6 +55,7 @@ angular.module('myApp.district', ['ngRoute'])
             console.log(isValid);
             let count = 0;
             $scope.multiplePrimaries = false;
+            $scope.sameDistrictName = false;
             for(var item in $scope.adddt.SalesPersons)
             {   
                 
@@ -67,36 +70,48 @@ angular.module('myApp.district', ['ngRoute'])
                 }
               
             }
+           
             if ($scope.isAddClicked == true){
-                console.log($scope.adddt)
+                console.log("pulaaaa");
+                console.log($scope.adddt);
+                for(var name in $scope.districts)
+                {   
+                    
+                    if( $scope.districts[name].Name === $scope.adddt.Name){
+                        $scope.sameDistrictName = true;
+                         return null;
+                    }              
+                }
                 districtService.insert($scope.adddt).then(function () {
-                    districtService.list().success(function (data) {
-                        $scope.district = data;
-                    });
+                    $scope.changeView(false,false,false);
+                    $scope.refresh();
                 });
             }
             else
             {
+                console.log("iubuuu");
                 districtService.update($scope.adddt).then(function () {
-                    districtService.list().success(function (data) {
-                        $scope.district = data;
-                    });
+                    $scope.changeView(false,true,false);
+                    $scope.refresh();
                 });
             }
         
 
 
         }
+
         
         $scope.updateDistrict = function (item){
-            console.log("PUla belita");
-            $scope.adddt = item;
-            $scope.isAddClicked = false;
-            $scope.isSelectedDt = false;
-            $scope.isUpdate = true;
-            
-
-
+            districtService.getSalesPerson(item.DistrictId).success(function(data){
+                $scope.adddt = item;
+                $scope.adddt.SalesPersons = data;
+                for(var element in $scope.adddt.SalesPersons)
+                {
+                    $scope.adddt.SalesPersons[element].SPId = "" + $scope.adddt.SalesPersons[element].SPId;
+                }
+                $scope.changeView(false,false,true);
+              }); 
+           
         }
 
 
@@ -104,9 +119,8 @@ angular.module('myApp.district', ['ngRoute'])
             districtService.delete($scope.selecteddt).then(function () {
                 $scope.isSelectedDt = false;
                 $scope.selected = 0;
-                districtService.list().success(function (data) {
-                    $scope.district = data;
-                });
+                $scope.refresh();
+                
             });
 
         }
@@ -114,5 +128,21 @@ angular.module('myApp.district', ['ngRoute'])
         $scope.pushNewSp = function (){
             $scope.adddt.SalesPersons.push({"SPId":"" ,"Position":""})
         }
+        $scope.removeSp = function(item){
+            let index = $scope.adddt.SalesPersons.indexOf(item);
+            $scope.adddt.SalesPersons.splice(index,1);
+        }
+
+       $scope.refresh = function(){
+        districtService.list().success(function(data){
+            $scope.districts = data;
+          });
+       }
+
+       $scope.changeView = function(add,select,update){
+        $scope.isAddClicked = add;
+        $scope.isSelectedDt = select;
+        $scope.isUpdate = update;
+       }
 
     }]);

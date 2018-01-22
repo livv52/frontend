@@ -11,7 +11,7 @@
 
                 <ul class="list-group">
 
-                    <a href="#" ng-class="{'active': item.DistrictId == selected}" class="list-group-item" ng-repeat="item in districts" ng-click="setSelected(item.DistrictId);setSelectedDt(item); $event.stopPropagation(); $event.preventDefault();">
+                    <a href="#" ng-class="{'active': item.DistrictId == selected}" class="list-group-item" ng-repeat="item in districts" ng-click="setSelected(item.DistrictId);setSelectedDt(item); $event.stopPropagation(); $event.preventDefault(); ">
                         {{item.Name}}
                         <!-- {{item.Lastname}} -->
                         <!-- <span ng-class="item.Position == 'Primary' ? 'primarysp' : 'secondarysp'">
@@ -40,19 +40,24 @@
 
                     Name: {{selecteddt.Name}}
                     <br>
-                    <div ng-repeat="dt in districts">
-                        <div ng-if="selectedst.DistrictId == dt.DistrictId">
-                            <br> Stores: {{dt.Name}}
+                    <hr style="border-top: 1px solid black; background: transparent;">
+                    <span ng-repeat="item in salespersons">
+                        Sales Person: {{item.Firstname}} {{item.Lastname}}
+                        <span ng-class="item.Position == 'Primary' ? 'primarysp' : 'secondarysp'">
+                                                {{item.Position}}
+                                            </span><br>
+                                        </span>
+                    <div ng-repeat="st in storesD">
+                        <div>
+                            <br> Stores: {{st.Name}}
                         </div>
                     </div>
-
-                    <hr style="border-top: 1px solid black; background: transparent;">
                 </div>
             </div>
 
             <div class="col-md-3 col-md-offset-1" ng-if="isAddClicked || isUpdate">
                 <h2>Add new district</h2>
-                <form name="Store" ng-submit="onSubmit(Store.$valid)">
+                <form name="District" ng-submit="onSubmit(District.$valid)">
                     <div class="form-group">
                         <label>Name: </label>
                         <input type="text" name="name" class="form-control" ng-model="adddt.Name" required>
@@ -74,6 +79,11 @@
                                         <option value="Secondary">Secondary</option>
                                         </select>
                                     </div>
+                                    <div class="col-md-1">
+                                            <label> Remove </label>
+                                        <button type="button" class="btn btn-danger" ng-click="removeSp(item)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                    </div>
+
                                 </div>
                             </div>
                                                     <div>
@@ -84,8 +94,11 @@
                     <!-- SUBMIT BUTTON -->
                     <input value="Submit" type="submit" class="btn btn-primary"></input><br>
                     <div ng-if="multiplePrimaries === true">
-                            <span class="text-danger"> You cannot multiple primary sales persons! </span>
+                            <span class="text-danger"> You cannot add multiple primary sales persons! </span>
 
+                        </div>
+                        <div ng-if="sameDistrictName === true">
+                                <span class="text-danger"> The district is already into list! </span>  
                         </div>
                 </form>
             </div>

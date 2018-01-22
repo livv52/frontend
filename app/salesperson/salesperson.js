@@ -11,6 +11,8 @@ angular.module('myApp.salesperson', ['ngRoute'])
 
     .controller('SalesPersonCtrl', ['$scope', 'salespersonService', function ($scope, salespersonService) {
 
+        $scope.districts = [];
+
         $scope.addsp = { Description: ""};
         salespersonService.list().success(function (data) {
             $scope.salesperson = data;
@@ -20,6 +22,10 @@ angular.module('myApp.salesperson', ['ngRoute'])
 
             $scope.selected = index;
             console.log($scope.selected);
+            salespersonService.getDistricts($scope.selected).success(function(data){
+                console.log("puta");
+                $scope.districts = data;
+              }); 
 
         }
 
@@ -30,7 +36,6 @@ angular.module('myApp.salesperson', ['ngRoute'])
             $scope.isAddClicked = false;
             $scope.isSelectedSp = true;
             console.log($scope.selectedsp);
-
         }
 
         $scope.addclicked = function () {
@@ -82,11 +87,8 @@ angular.module('myApp.salesperson', ['ngRoute'])
                 salespersonService.list().success(function (data) {
                     $scope.salesperson = data;
                 });
-            });
+            }); }
 
             
-
-
-        }
 
     }]);

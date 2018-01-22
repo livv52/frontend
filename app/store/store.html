@@ -51,7 +51,7 @@
 
             <div class="col-md-3 col-md-offset-1" ng-if="isAddClicked || isUpdate">
                 <h2>Add new store</h2>
-                <form name="Store" novalidate>
+                <form name="Store" ng-submit="onSubmit(Store.$valid)">
                     <div class="form-group">
                         <label>Name: </label>
                         <input type="text" name="name" class="form-control" ng-model="addst.Name" required>
@@ -66,7 +66,7 @@
                     </div>
 
                     <!-- SUBMIT BUTTON -->
-                    <button type="submit" class="btn btn-primary" ng-click="onSubmit(Store.$valid)">Submit</button>
+                    <input value="Submit" type="submit" class="btn btn-primary"></input>
                 </form>
             </div>
         </div>

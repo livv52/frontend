@@ -12,7 +12,8 @@
                 <h2>Districts</h2>
                 <ul class="list-group">
 
-                    <a href="#" ng-class="{'active': item.DistrictId == selected}" class="list-group-item" ng-repeat="item in district" ng-click="setSelected(item.DistrictId);$event.stopPropagation(); $event.preventDefault();setDistrict(item.DistrictId)">{{item.Name}}</a>
+                    <a href="#" ng-class="{'active': item.DistrictId == selected}" class="list-group-item" ng-repeat="item in district" ng-click="setSelected(item.DistrictId);$event.stopPropagation(); $event.preventDefault();setDistrict(item.DistrictId)">
+                        {{item.Name}}</a>
                 </ul>
             </div>
             <div class="col-md-3 align-center">
