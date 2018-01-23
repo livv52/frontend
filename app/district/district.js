@@ -31,11 +31,9 @@ angular.module('myApp.district', ['ngRoute'])
         $scope.setSelected = function (index) {
 
             $scope.selected = index;
-            console.log($scope.selected);
 
             districtService.getSalesPerson( $scope.selected).success(function(data){
                 $scope.salespersons = data;
-                console.log($scope.salespersons);
               }); 
 
         }
@@ -58,7 +56,6 @@ angular.module('myApp.district', ['ngRoute'])
         }
 
         $scope.onSubmit = function (isValid) {
-            console.log(isValid);
             let count = 0;
             $scope.multiplePrimaries = false;
             $scope.sameDistrictName = false;
@@ -138,14 +135,8 @@ angular.module('myApp.district', ['ngRoute'])
         $scope.setDistrict = function (districtid){
             districtService.getStores(districtid).success(function(data){
               $scope.stores = data;
-              console.log($scope.stores);
             }); 
         
-            // districtService.getSalesPerson(districtid).success(function(data){
-            //   $scope.salesperson = data;
-            //   console.log($scope.salesperson);
-            // }); 
-            
           }
 
         $scope.pushNewSp = function (){

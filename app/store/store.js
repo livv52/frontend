@@ -23,7 +23,6 @@ angular.module('myApp.store', ['ngRoute'])
         $scope.setSelected = function (index) {
 
             $scope.selected = index;
-            console.log($scope.selected);
 
         }
 
@@ -31,8 +30,6 @@ angular.module('myApp.store', ['ngRoute'])
 
             $scope.selectedst = item;
             $scope.changeView(false,true,false);
-            console.log($scope.selectedst);
-
         }
 
         $scope.addclicked = function () {
@@ -43,9 +40,7 @@ angular.module('myApp.store', ['ngRoute'])
         }
 
         $scope.onSubmit = function (isValid) {
-            console.log(isValid);
             if ($scope.isAddClicked == true){
-                console.log($scope.addst)
                 storeService.insert($scope.addst).then(function () {
                     $scope.changeView(false,false,false);
                     $scope.refresh();
@@ -65,7 +60,6 @@ angular.module('myApp.store', ['ngRoute'])
         
         $scope.updateStore = function (item){
             $scope.addst = item;
-            console.log($scope.addst);
             $scope.addst.DistrictId = "" + $scope.addst.DistrictId ;
             $scope.changeView(false,false,true);
         }

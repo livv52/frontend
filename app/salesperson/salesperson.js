@@ -22,7 +22,6 @@ angular.module('myApp.salesperson', ['ngRoute'])
         $scope.setSelected = function (index) {
 
             $scope.selected = index;
-            console.log($scope.selected);
             salespersonService.getDistricts($scope.selected).success(function (data) {
                 $scope.districts = data;
             });
@@ -33,7 +32,6 @@ angular.module('myApp.salesperson', ['ngRoute'])
 
             $scope.selectedsp = item;
             $scope.changeView (false, true, false);
-            console.log($scope.selectedsp);
         }
 
         $scope.addclicked = function () {
@@ -44,7 +42,6 @@ angular.module('myApp.salesperson', ['ngRoute'])
         }
 
         $scope.onSubmit = function (isValid) {
-            console.log(isValid);
             if ($scope.isAddClicked == true) {
                 salespersonService.insert($scope.addsp).then(function () {
                     $scope.changeView(false,false,false);
