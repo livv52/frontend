@@ -11,7 +11,7 @@
 
                 <ul class="list-group">
 
-                    <a href="#" ng-class="{'active': item.DistrictId == selected}" class="list-group-item" ng-repeat="item in districts" ng-click="setSelected(item.DistrictId);setSelectedDt(item); $event.stopPropagation(); $event.preventDefault(); ">
+                    <a href="#" ng-class="{'active': item.DistrictId == selected}" class="list-group-item" ng-repeat="item in districts" ng-click="setSelected(item.DistrictId);setSelectedDt(item); $event.stopPropagation(); $event.preventDefault();setDistrict(item.DistrictId) ">
                         {{item.Name}}
                         <!-- {{item.Lastname}} -->
                         <!-- <span ng-class="item.Position == 'Primary' ? 'primarysp' : 'secondarysp'">
@@ -29,7 +29,7 @@
                              Edit
                             </button>
 
-                        <button type="button" class="btn btn-danger" ng-click="deleteDistrict(selecteddt)"> 
+                        <button type="button"  ng-disabled="stores.length >0" class="btn btn-danger" ng-click="deleteDistrict(selecteddt)"> 
                         <span class="glyphicon glyphicon-trash" aria-hidden="true">
                             </span> 
                             Delete
@@ -46,10 +46,11 @@
                         <span ng-class="item.Position == 'Primary' ? 'primarysp' : 'secondarysp'">
                                                 {{item.Position}}
                                             </span><br>
-                                        </span>
-                    <div ng-repeat="st in storesD">
+                    </span>
+                    <hr style="border-top: 1px solid black; background: transparent;">
+                    <div ng-repeat="st in stores">
                         <div>
-                            <br> Stores: {{st.Name}}
+                           Stores: {{st.Name}}
                         </div>
                     </div>
                 </div>
@@ -62,43 +63,46 @@
                         <label>Name: </label>
                         <input type="text" name="name" class="form-control" ng-model="adddt.Name" required>
                     </div>
-                    <div ng-repeat = "item in adddt.SalesPersons" class = "form-group">
-                        <div class = "row">
-                        <div class="col-md-6">
-                        <label for="singleSelect"> Sales Person: </label>
-                        <select class="form-control" name="singleSelect" ng-model="item.SPId" required>
+                    <div ng-repeat="item in adddt.SalesPersons" class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="singleSelect"> Sales Person: </label>
+                                <select class="form-control" name="singleSelect" ng-model="item.SPId" required>
                                         <option disabled value="">Select Sales Person</option>
                                         <option ng-repeat="sp in salesperson" value={{sp.SPId}}>{{sp.Firstname}} {{sp.Lastname}}</option>
                                         </select>
-                                    </div>
-                        <div class="col-md-5">
-                        <label for="singleSelect"> Position: </label>
-                        <select class="form-control" name="singleSelect" ng-model="item.Position" required>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="singleSelect"> Position: </label>
+                                <select class="form-control" name="singleSelect" ng-model="item.Position" required>
                                         <option disabled value="">Select position</option>
                                         <option value="Primary">Primary</option>
                                         <option value="Secondary">Secondary</option>
                                         </select>
-                                    </div>
-                                    <div class="col-md-1">
-                                            <label> Remove </label>
-                                        <button type="button" class="btn btn-danger" ng-click="removeSp(item)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-                                    </div>
-
-                                </div>
                             </div>
-                                                    <div>
-                                                        <button type="button" class="btn btn-success" ng-click="pushNewSp()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add another</button>
-                                                    </div>
-                                                    
-                                                    <br>
+                            <div class="col-md-1">
+                                <label> Remove </label>
+                                <button type="button" class="btn btn-danger" ng-click="removeSp(item)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-success" ng-click="pushNewSp()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add another</button>
+                    </div>
+
+                    <br>
                     <!-- SUBMIT BUTTON -->
                     <input value="Submit" type="submit" class="btn btn-primary"></input><br>
                     <div ng-if="multiplePrimaries === true">
-                            <span class="text-danger"> You cannot add multiple primary sales persons! </span>
+                        <span class="text-danger"> You cannot add multiple primary sales persons! </span>
 
-                        </div>
-                        <div ng-if="sameDistrictName === true">
-                                <span class="text-danger"> The district is already into list! </span>  
+                    </div>
+                    <div ng-if="sameDistrictName === true">
+                        <span class="text-danger"> The district is already into list! </span>
+                    </div>
+                    <div ng-if="atLeastPrimary === true">
+                            <span class="text-danger"> The district needs a primary sales person! </span>
                         </div>
                 </form>
             </div>

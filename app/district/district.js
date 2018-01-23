@@ -15,8 +15,11 @@ angular.module('myApp.district', ['ngRoute'])
          $scope.adddt.SalesPersons = [{"SPId":"" ,"Position":""}];
          $scope.multiplePrimaries = false;
          $scope.sameDistrictName = false;
+         $scope.atLeastPrimary = false;
          $scope.salespersons = [];
         
+        
+
          salespersonService.list().success(function (data) {
             $scope.salesperson = data;
         });
@@ -38,9 +41,9 @@ angular.module('myApp.district', ['ngRoute'])
         }
 
         $scope.setSelectedDt = function (item) {
-
             $scope.selecteddt = item;
             $scope.changeView(false,true,false);
+            $scope.clearError();
            
 
         }
@@ -48,6 +51,9 @@ angular.module('myApp.district', ['ngRoute'])
         $scope.addclicked = function () {
             $scope.changeView(true,false,false);
             $scope.selected = 0 ;
+            $scope.adddt = { };
+            $scope.adddt.SalesPersons = [{"SPId":"" ,"Position":""}];
+            $scope.clearError();
 
         }
 
@@ -56,7 +62,10 @@ angular.module('myApp.district', ['ngRoute'])
             let count = 0;
             $scope.multiplePrimaries = false;
             $scope.sameDistrictName = false;
-            for(var item in $scope.adddt.SalesPersons)
+            $scope.atLeastPrimary = false;
+           
+          
+                 for(var item in $scope.adddt.SalesPersons)
             {   
                 
                 if($scope.adddt.SalesPersons[item].Position === "Primary"){
@@ -68,12 +77,13 @@ angular.module('myApp.district', ['ngRoute'])
                    $scope.multiplePrimaries = true;
                     return null;
                 }
-              
+            }
+            if(count < 1){
+                $scope.atLeastPrimary  = true;
+                return null;
             }
            
             if ($scope.isAddClicked == true){
-                console.log("pulaaaa");
-                console.log($scope.adddt);
                 for(var name in $scope.districts)
                 {   
                     
@@ -89,9 +99,8 @@ angular.module('myApp.district', ['ngRoute'])
             }
             else
             {
-                console.log("iubuuu");
                 districtService.update($scope.adddt).then(function () {
-                    $scope.changeView(false,true,false);
+                    $scope.changeView(false,false,false);
                     $scope.refresh();
                 });
             }
@@ -110,6 +119,7 @@ angular.module('myApp.district', ['ngRoute'])
                     $scope.adddt.SalesPersons[element].SPId = "" + $scope.adddt.SalesPersons[element].SPId;
                 }
                 $scope.changeView(false,false,true);
+                $scope.clearError();
               }); 
            
         }
@@ -124,6 +134,19 @@ angular.module('myApp.district', ['ngRoute'])
             });
 
         }
+
+        $scope.setDistrict = function (districtid){
+            districtService.getStores(districtid).success(function(data){
+              $scope.stores = data;
+              console.log($scope.stores);
+            }); 
+        
+            // districtService.getSalesPerson(districtid).success(function(data){
+            //   $scope.salesperson = data;
+            //   console.log($scope.salesperson);
+            // }); 
+            
+          }
 
         $scope.pushNewSp = function (){
             $scope.adddt.SalesPersons.push({"SPId":"" ,"Position":""})
@@ -143,6 +166,12 @@ angular.module('myApp.district', ['ngRoute'])
         $scope.isAddClicked = add;
         $scope.isSelectedDt = select;
         $scope.isUpdate = update;
+       }
+
+       $scope.clearError= function(){
+        $scope.multiplePrimaries = false;
+        $scope.sameDistrictName = false;
+        $scope.atLeastPrimary = false;
        }
 
     }]);

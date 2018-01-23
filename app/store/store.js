@@ -30,19 +30,15 @@ angular.module('myApp.store', ['ngRoute'])
         $scope.setSelectedSt = function (item) {
 
             $scope.selectedst = item;
-            $scope.isUpdate = false;            
-            $scope.isAddClicked = false;
-            $scope.isSelectedSt = true;
+            $scope.changeView(false,true,false);
             console.log($scope.selectedst);
 
         }
 
         $scope.addclicked = function () {
-
-            $scope.isUpdate = false;
-            $scope.isSelectedSt = false;
-            $scope.isAddClicked = true;
+            $scope.changeView(true,false,false);
             $scope.selected = 0 ;
+            $scope.addst = { };
 
         }
 
@@ -51,23 +47,15 @@ angular.module('myApp.store', ['ngRoute'])
             if ($scope.isAddClicked == true){
                 console.log($scope.addst)
                 storeService.insert($scope.addst).then(function () {
-                    $scope.isSelectedSt = false;
-                    $scope.isUpdate = false;
-                    $scope.isAddClicked = false;
-                    storeService.list().success(function (data) {
-                        $scope.store = data;
-                    });
+                    $scope.changeView(false,false,false);
+                    $scope.refresh();
                 });
             }
             else
             {
                 storeService.update($scope.addst).then(function () {
-                    $scope.isSelectedSt = true;
-                    $scope.isUpdate = false;
-                    $scope.isAddClicked = false;
-                    storeService.list().success(function (data) {
-                        $scope.store = data;
-                    });
+                    $scope.changeView(false,true,false);
+                    $scope.refresh();
                 });
             }
         
@@ -76,26 +64,30 @@ angular.module('myApp.store', ['ngRoute'])
         }
         
         $scope.updateStore = function (item){
-            console.log("PUla belita");
             $scope.addst = item;
-            $scope.isAddClicked = false;
-            $scope.isSelectedSt = false;
-            $scope.isUpdate = true;
-            
-
-
+            console.log($scope.addst);
+            $scope.addst.DistrictId = "" + $scope.addst.DistrictId ;
+            $scope.changeView(false,false,true);
         }
-
 
         $scope.deleteStore = function (item){
             storeService.delete($scope.selectedst).then(function () {
                 $scope.isSelectedSt = false;
                 $scope.selected = 0;
-                storeService.list().success(function (data) {
-                    $scope.store = data;
-                });
+                $scope.refresh();
             });
+         }
 
-        }
+         $scope.changeView = function(add,select,update){
+            $scope.isAddClicked = add;
+            $scope.isSelectedSt = select;
+            $scope.isUpdate = update;
+           }
+
+        $scope.refresh = function(){
+            storeService.list().success(function (data) {
+                        $scope.store = data;
+                    });
+           }
 
     }]);

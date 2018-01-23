@@ -13,7 +13,8 @@ angular.module('myApp.salesperson', ['ngRoute'])
 
         $scope.districts = [];
 
-        $scope.addsp = { Description: ""};
+        $scope.addsp = { Description: "" };
+
         salespersonService.list().success(function (data) {
             $scope.salesperson = data;
         });
@@ -22,73 +23,70 @@ angular.module('myApp.salesperson', ['ngRoute'])
 
             $scope.selected = index;
             console.log($scope.selected);
-            salespersonService.getDistricts($scope.selected).success(function(data){
-                console.log("puta");
+            salespersonService.getDistricts($scope.selected).success(function (data) {
                 $scope.districts = data;
-              }); 
+            });
 
         }
 
         $scope.setSelectedSp = function (item) {
 
             $scope.selectedsp = item;
-            $scope.isUpdate = false;            
-            $scope.isAddClicked = false;
-            $scope.isSelectedSp = true;
+            $scope.changeView (false, true, false);
             console.log($scope.selectedsp);
         }
 
         $scope.addclicked = function () {
-
-            $scope.isUpdate = false;
-            $scope.isSelectedSp = false;
-            $scope.isAddClicked = true;
-            $scope.selected = 0 ;
+            $scope.changeView (true, false, false);
+            $scope.selected = 0;
+            $scope.addsp = { Description: "" };
 
         }
 
         $scope.onSubmit = function (isValid) {
             console.log(isValid);
-            if ($scope.isAddClicked == true){
+            if ($scope.isAddClicked == true) {
                 salespersonService.insert($scope.addsp).then(function () {
-                    salespersonService.list().success(function (data) {
-                        $scope.salesperson = data;
-                    });
+                    $scope.changeView(false,false,false);
+                    $scope.refresh();
                 });
             }
-            else
-            {
+            else {
                 salespersonService.update($scope.addsp).then(function () {
-                    salespersonService.list().success(function (data) {
-                        $scope.salesperson = data;
-                    });
+                    $scope.changeView(false,true,false);
+                    $scope.refresh();
                 });
             }
-        
+
 
 
         }
-        
-        $scope.updateSalesperson = function (item){
-            console.log("PUla belita");
+
+        $scope.updateSalesperson = function (item) {
             $scope.addsp = item;
-            $scope.isAddClicked = false;
-            $scope.isSelectedSp = false;
-            $scope.isUpdate = true;
-            
+            $scope.changeView (false, false, true);
+          }
 
-
-        }
-
-        $scope.deleteSalesperson = function (item){
+        $scope.deleteSalesperson = function (item) {
             salespersonService.delete($scope.selectedsp).then(function () {
                 $scope.isSelectedSp = false;
                 $scope.selected = 0;
-                salespersonService.list().success(function (data) {
-                    $scope.salesperson = data;
-                });
-            }); }
+                $scope.refresh();
+            });
+        }
 
-            
+        $scope.refresh = function () {
+            salespersonService.list().success(function (data) {
+                $scope.salesperson = data;
+            });
+        }
+
+        $scope.changeView = function (add, select, update) {
+            $scope.isAddClicked = add;
+            $scope.isSelectedSp = select;
+            $scope.isUpdate = update;
+        }
+
+
 
     }]);
